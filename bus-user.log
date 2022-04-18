@@ -1,0 +1,10 @@
+2022-04-12 19:45:08.112  INFO 12672 --- [main] c.uestc.luckyuser.LuckyUserApplication   : Starting LuckyUserApplication using Java 1.8.0_221 on DESKTOP-PKV3180 with PID 12672 (C:\Users\Jacob\Desktop\ssm\lucky\lucky-user\target\classes started by Jacob in C:\Users\Jacob\Desktop\ssm\lucky)
+2022-04-12 19:45:08.119  INFO 12672 --- [main] c.uestc.luckyuser.LuckyUserApplication   : No active profile set, falling back to 1 default profile: "default"
+2022-04-12 19:45:08.739  WARN 12672 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.uestc.luckyuser]' package. Please check your configuration.
+2022-04-12 19:45:09.019  INFO 12672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2022-04-12 19:45:09.029  INFO 12672 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-12 19:45:09.029  INFO 12672 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.60]
+2022-04-12 19:45:09.127  INFO 12672 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-12 19:45:09.127  INFO 12672 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 924 ms
+2022-04-12 19:45:09.528  INFO 12672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2022-04-12 19:45:09.536  INFO 12672 --- [main] c.uestc.luckyuser.LuckyUserApplication   : Started LuckyUserApplication in 2.08 seconds (JVM running for 2.957)
