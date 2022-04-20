@@ -25,7 +25,7 @@ public class User {
     private String name;
     private Date createTime;
     private Date updateTime;
-    private int gender;
+    private Integer gender;
     private String password;
     private String mobilePhoneNumber;
 }

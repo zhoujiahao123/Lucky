@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class UserException extends Exception {
+public class BusinessException extends Exception {
     private ResultCode resultCode;
 }
