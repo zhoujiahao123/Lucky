@@ -14,6 +14,8 @@ public class UserPrefix extends BasePrefix {
         super(prefix);
     }
 
-    public static UserPrefix getByMobilePhoneNumber = new UserPrefix("MobilePhoneNumber");
-    public static UserPrefix getByToken = new UserPrefix("Token");
+    public static final UserPrefix getByMobilePhoneNumber = new UserPrefix("MobilePhoneNumber");
+    public static final UserPrefix getByToken = new UserPrefix("Token");
+    public static final UserPrefix VerifyTimes = new UserPrefix("verifyTimes");
+    public static final UserPrefix VerifyCode = new UserPrefix("verifyCode");
 }

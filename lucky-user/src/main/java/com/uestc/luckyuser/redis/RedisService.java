@@ -45,7 +45,7 @@ public class RedisService {
         }
     }
 
-    public <T> T get(KeyPrefix prefix,String key, Class<T> clazz) {
+    public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
         if (key == null || key.isEmpty()) return null;
         Jedis jedis = null;
         try {
@@ -59,7 +59,6 @@ public class RedisService {
                 jedis.close();
             }
         }
-
     }
 
     /**
@@ -106,6 +105,22 @@ public class RedisService {
             return (T) value;
         } else {
             return JSON.toJavaObject(JSON.parseObject(value), clazz);
+        }
+    }
+
+    public <T> Long decr(KeyPrefix prefix, String key) {
+        if (key == null || key.isEmpty()) {
+            return null;
+        }
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String realKey = prefix.getPrefix() + key;
+            return jedis.decr(realKey);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 }

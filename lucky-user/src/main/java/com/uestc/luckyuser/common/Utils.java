@@ -20,6 +20,8 @@ public class Utils {
                 throw new BusinessException(ResultCode.GENDER_CANNOT_BLANK);
             } else if (fieldError.getDefaultMessage().equals("手机号码不能为空")) {
                 throw new BusinessException(ResultCode.PHONE_CANNOT_BLANK);
+            } else if (fieldError.getDefaultMessage().equals("验证码不能为空")) {
+                throw new BusinessException(ResultCode.VERIFY_CODE_CANNOT_BLANK);
             }
         }
     }

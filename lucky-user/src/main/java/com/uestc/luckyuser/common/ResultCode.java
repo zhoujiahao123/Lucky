@@ -20,10 +20,12 @@ public enum ResultCode {
     USER_LOG_UP_FAILED(20002,"用户注册失败"),
     MOBILE_PHONE_NUMBER_EXIST(20003,"手机号已经注册"),
     NAME_CANNOT_BLANK(20004,"用户名不能为空"),
-    PASSWORD_CANNOT_BLANK(20004,"密码不能为空"),
-    PHONE_CANNOT_BLANK(20004,"手机号不能为空"),
-    GENDER_CANNOT_BLANK(20004,"性别不能为空"),
-    PHONE_NOT_MEET_PASSWORD(20005,"用户名或密码错误"),
+    PASSWORD_CANNOT_BLANK(20005,"密码不能为空"),
+    PHONE_CANNOT_BLANK(20006,"手机号不能为空"),
+    GENDER_CANNOT_BLANK(20007,"性别不能为空"),
+    PHONE_NOT_MEET_PASSWORD(20008,"用户名或密码错误"),
+    VERIFY_CODE_CANNOT_BLANK(20009,"验证码不能为空"),
+    VERIFY_CODE_ERROR(20010,"验证码错误"),
     ;
 
 

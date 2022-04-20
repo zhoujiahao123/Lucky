@@ -22,4 +22,6 @@ public interface UserService {
     User insertUser(UserParam userParam) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException;
 
     LoginResponse login(LoginParam loginParam) throws UnsupportedEncodingException, NoSuchAlgorithmException, BusinessException;
+
+    boolean verifyCode(String code,String mobilePhoneNumber);
 }

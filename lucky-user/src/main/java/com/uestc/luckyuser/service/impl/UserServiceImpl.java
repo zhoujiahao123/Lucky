@@ -8,6 +8,8 @@ import com.uestc.luckyuser.dto.request.LoginParam;
 import com.uestc.luckyuser.dto.request.UserParam;
 import com.uestc.luckyuser.dto.response.LoginResponse;
 import com.uestc.luckyuser.model.User;
+import com.uestc.luckyuser.redis.RedisService;
+import com.uestc.luckyuser.redis.UserPrefix;
 import com.uestc.luckyuser.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     UserMapper userMapper;
+    @Resource
+    RedisService redisService;
 
     @Override
     public User getUserById(Long id) {
@@ -60,6 +64,29 @@ public class UserServiceImpl implements UserService {
         LoginResponse response = new LoginResponse();
         BeanUtils.copyProperties(user, response);
         return response;
+    }
+
+    /**
+     * 如果{code} 失败次数已经达到5次，那么返回{false}
+     * 如果{code} 验证失败，那么返回{false}
+     * 否则，返回{true}
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public boolean verifyCode(String code, String mobilePhoneNumber) {
+        if (code == null || code.isEmpty()) {
+            return false;
+        }
+        long verifyTimes = redisService.decr(UserPrefix.VerifyTimes, mobilePhoneNumber);
+        if (verifyTimes >= 0) {
+            String realCode = redisService.get(UserPrefix.VerifyCode, mobilePhoneNumber, String.class);
+            if (code.toUpperCase().equals(realCode.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
