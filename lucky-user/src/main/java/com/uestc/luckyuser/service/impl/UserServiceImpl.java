@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
         queryWrapper.eq("mobile_phone_number", loginParam.getMobilePhoneNumber())
                 .eq("password", encodeByMd5(loginParam.getPassword()));
         User user = userMapper.selectOne(queryWrapper);
+
         if (user == null) {
             throw new BusinessException(ResultCode.PHONE_NOT_MEET_PASSWORD);
         }
@@ -87,6 +88,13 @@ public class UserServiceImpl implements UserService {
             }
         }
         return false;
+    }
+
+    @Override
+    public User findUserByMobilePhoneNumber(String mobilePhoneNumber) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mobile_phone_number",mobilePhoneNumber);
+        return userMapper.selectOne(queryWrapper);
     }
 
     /**

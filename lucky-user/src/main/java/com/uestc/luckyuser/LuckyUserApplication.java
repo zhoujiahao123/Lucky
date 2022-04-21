@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.uestc.luckyuser.dao")
 public class LuckyUserApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(LuckyUserApplication.class, args);
     }
 }

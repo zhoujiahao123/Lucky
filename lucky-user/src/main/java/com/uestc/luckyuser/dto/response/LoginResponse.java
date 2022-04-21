@@ -19,4 +19,5 @@ public class LoginResponse {
     private Integer gender;
     private String mobilePhoneNumber;
     private String token;
+    private String role;
 }

@@ -5,6 +5,7 @@ import com.uestc.luckyuser.common.*;
 import com.uestc.luckyuser.dto.request.LoginParam;
 import com.uestc.luckyuser.dto.request.UserParam;
 import com.uestc.luckyuser.dto.response.LoginResponse;
+import com.uestc.luckyuser.dto.response.UserInfoResponse;
 import com.uestc.luckyuser.model.User;
 import com.uestc.luckyuser.redis.RedisService;
 import com.uestc.luckyuser.redis.UserPrefix;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -63,6 +65,7 @@ public class UserController {
     @ApiOperation("根据id获取用户")
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
+    @PreAuthorize("hasAnyRole('ROLE_normal')")
     public CommonResult<User> getUser(@PathVariable(name = "id") Long id) throws BusinessException {
         User user = userService.getUserById(id);
         if (user == null) {
@@ -104,7 +107,7 @@ public class UserController {
 
         //为该用户生成一个Token，然后返回给客户端，客户端每次通过URL重写
         // 把token上传到服务器
-        String token = jwtTokenUtil.generateToken(loginParam.getMobilePhoneNumber(), "123456");
+        String token = jwtTokenUtil.generateToken(loginParam.getMobilePhoneNumber(), response.getRole());
         response.setToken(token);
 
         //把id 和 token 通过redis关联起来
@@ -138,7 +141,6 @@ public class UserController {
         BufferedImage image = (BufferedImage) objs[1];
         loggerFactory.info(verifyCode);
 
-
         //放入redis中，实现验证功能
         redisService.set(UserPrefix.VerifyTimes, mobilePhoneNumber, 5);
         redisService.set(UserPrefix.VerifyCode, mobilePhoneNumber, verifyCode);
@@ -147,5 +149,12 @@ public class UserController {
         response.setContentType("image/png");
         OutputStream out = response.getOutputStream();
         ImageIO.write(image, "png", out);
+    }
+
+    @ApiOperation(value = "获取用户信息")
+    @RequestMapping("/info")
+    @ResponseBody
+    public CommonResult<UserInfoResponse> getUserInfoResponse() {
+        return null;
     }
 }
