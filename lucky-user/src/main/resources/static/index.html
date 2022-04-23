@@ -245,11 +245,13 @@
         var g_currentUser = null;
         //获取当前用户的信息
         $.ajax({
-            type:"POST",
-            contentType:"application/json;charset=utf-8",
-            url:"/user/getcurrentuser",
+            type:"GET",
+            headers:{
+                "Authorization":document.cookie
+            },
+            url:"/user/info",
             success:function(data){
-                  if(data.status == "success"){
+                  if(data.code == 200){
                       if(data.data == null){
                           g_currentUser = null;
                       }else{

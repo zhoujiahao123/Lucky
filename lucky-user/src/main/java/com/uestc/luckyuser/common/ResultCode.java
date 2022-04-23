@@ -26,6 +26,7 @@ public enum ResultCode {
     PHONE_NOT_MEET_PASSWORD(20008,"用户名或密码错误"),
     VERIFY_CODE_CANNOT_BLANK(20009,"验证码不能为空"),
     VERIFY_CODE_ERROR(20010,"验证码错误"),
+    USER_OR_PASSWORD_EMPTY(20011,"用户名或密码不能为空"),
     ;
 
 

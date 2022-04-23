@@ -39,7 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         //配置白名单
-        registry.antMatchers("/user/login")
+        registry.antMatchers("/user/logup","/user/login","/user/getcode","/static/**",
+                "/admin/admin/**")
                 .permitAll();
         registry.and()
                 .authorizeRequests()

@@ -2,7 +2,9 @@ package com.uestc.luckyuser.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.uestc.luckyuser.common.BusinessException;
+import com.uestc.luckyuser.common.JwtTokenUtil;
 import com.uestc.luckyuser.common.ResultCode;
+import com.uestc.luckyuser.controller.UserController;
 import com.uestc.luckyuser.dao.UserMapper;
 import com.uestc.luckyuser.dto.request.LoginParam;
 import com.uestc.luckyuser.dto.request.UserParam;
@@ -12,14 +14,21 @@ import com.uestc.luckyuser.redis.RedisService;
 import com.uestc.luckyuser.redis.UserPrefix;
 import com.uestc.luckyuser.service.UserService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @author jacob
@@ -32,6 +41,10 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     @Resource
     RedisService redisService;
+
+    @Resource
+    private JwtTokenUtil jwtTokenUtil;
+
 
     @Override
     public User getUserById(Long id) {
@@ -76,13 +89,13 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public boolean verifyCode(String code, String mobilePhoneNumber) {
+    public boolean verifyCode(String code, HttpSession session) {
         if (code == null || code.isEmpty()) {
             return false;
         }
-        long verifyTimes = redisService.decr(UserPrefix.VerifyTimes, mobilePhoneNumber);
+        long verifyTimes = redisService.decr(UserPrefix.VerifyTimes, session.getId());
         if (verifyTimes >= 0) {
-            String realCode = redisService.get(UserPrefix.VerifyCode, mobilePhoneNumber, String.class);
+            String realCode = (String) session.getAttribute(UserController.VERIFY_CODE_SESSION);
             if (code.toUpperCase().equals(realCode.toUpperCase())) {
                 return true;
             }
@@ -93,8 +106,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByMobilePhoneNumber(String mobilePhoneNumber) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mobile_phone_number",mobilePhoneNumber);
+        queryWrapper.eq("mobile_phone_number", mobilePhoneNumber);
         return userMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public User findUserByToken() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token = request.getHeader("Authorization");
+        String mobilePhoneNumber = jwtTokenUtil.getUsernameFromToken(token);
+        return findUserByMobilePhoneNumber(mobilePhoneNumber);
+    }
+
+    @Override
+    public int countUser() {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        List<User> users = userMapper.selectList(queryWrapper);
+        return users.size();
     }
 
     /**

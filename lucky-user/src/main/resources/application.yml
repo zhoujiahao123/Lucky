@@ -63,3 +63,6 @@ jwt:
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
   ignore-url: /user/register,/user/check,/swagger,/v2,/webjars,/seats,/bus,/file
+admin:
+  email: admin
+  password: 4QrcOUm6Wau+VuBX8g+IPg==

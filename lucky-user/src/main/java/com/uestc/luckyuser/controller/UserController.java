@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class UserController {
     RedisService redisService;
 
     Logger loggerFactory = LoggerFactory.getLogger(UserController.class);
+    public static final String VERIFY_CODE_SESSION = "VERIFY_CODE_SESSION";
 
     @RequestMapping("/index")
     public ModelAndView indexTest() {
@@ -65,7 +67,7 @@ public class UserController {
     @ApiOperation("根据id获取用户")
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAnyRole('ROLE_normal')")
+    @PreAuthorize("hasAnyRole('ROLE_NORMAL')")
     public CommonResult<User> getUser(@PathVariable(name = "id") Long id) throws BusinessException {
         User user = userService.getUserById(id);
         if (user == null) {
@@ -91,13 +93,14 @@ public class UserController {
     @RequestMapping("/login")
     @ResponseBody
     public CommonResult<LoginResponse> login(@Validated @RequestBody LoginParam loginParam,
-                                             BindingResult bindingResult) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+                                             BindingResult bindingResult,HttpServletRequest request) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         if (bindingResult.hasErrors()) {
             Utils.getErrorMessage(bindingResult);
         }
 
         //首先验证验证码是否正确
-        boolean isVerify = userService.verifyCode(loginParam.getCode(), loginParam.getMobilePhoneNumber());
+        HttpSession session = request.getSession();
+        boolean isVerify = userService.verifyCode(loginParam.getCode(), session);
         if (!isVerify) {
             throw new BusinessException(ResultCode.VERIFY_CODE_ERROR);
         }
@@ -105,7 +108,6 @@ public class UserController {
         //验证码正确，则开始验证登录信息是否正确
         LoginResponse response = userService.login(loginParam);
 
-        //为该用户生成一个Token，然后返回给客户端，客户端每次通过URL重写
         // 把token上传到服务器
         String token = jwtTokenUtil.generateToken(loginParam.getMobilePhoneNumber(), response.getRole());
         response.setToken(token);
@@ -116,17 +118,19 @@ public class UserController {
         return CommonResult.success(response);
     }
 
+
     /**
      * 无论是手机验证登录 亦或者是 图形验证码登录
      * 都希望用户能提供一个唯一id，类似{mibilePhoneNumber}，以便作为redis的key
      *
-     * @param mobilePhoneNumber
+     * @param
      * @param response
      * @throws IOException
      */
     @ApiOperation("获取验证码操作")
     @RequestMapping("/getcode")
-    public void getCode(@RequestParam("mobilePhoneNumber") String mobilePhoneNumber, HttpServletResponse response) throws IOException {
+    public void getCode(HttpServletResponse response,HttpServletRequest request) throws IOException {
+        String sessionId = request.getSession().getId();
         Object[] objs = VerifyUtil.newBuilder()
                 .setWidth(120)   //设置图片的宽度
                 .setHeight(35)   //设置图片的高度
@@ -142,8 +146,9 @@ public class UserController {
         loggerFactory.info(verifyCode);
 
         //放入redis中，实现验证功能
-        redisService.set(UserPrefix.VerifyTimes, mobilePhoneNumber, 5);
-        redisService.set(UserPrefix.VerifyCode, mobilePhoneNumber, verifyCode);
+        redisService.set(UserPrefix.VerifyTimes, sessionId, 5);
+        //将验证码放入session中
+        request.getSession().setAttribute(VERIFY_CODE_SESSION,verifyCode);
 
         //返回图片给前端
         response.setContentType("image/png");
@@ -155,6 +160,9 @@ public class UserController {
     @RequestMapping("/info")
     @ResponseBody
     public CommonResult<UserInfoResponse> getUserInfoResponse() {
-        return null;
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        User user = userService.findUserByToken();
+        BeanUtils.copyProperties(user, userInfoResponse);
+        return CommonResult.success(userInfoResponse);
     }
 }

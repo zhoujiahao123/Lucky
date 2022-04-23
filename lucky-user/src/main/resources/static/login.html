@@ -39,6 +39,9 @@
         .swipe div {font-size: 12px; text-align: center;color: #999;}
         .thrSearch {left: 15px;right: 60px;background-color: #E8E8E8;color: #999;}
 
+        .txtSearch{ vertical-align:middle; border:1px solid #999; width:200px; height:40px;}
+        .btnSearch{ vertical-align:middle;}
+
         /* 头部切换样式 */
         .titlebar {display: none;}
         .activebar {display: block;}
@@ -114,6 +117,13 @@
                     <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="密码" name="password" id="password"/>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label">验证码</label>
+                <div class="input-icon">
+                    <input class="txtSearch" type="text" autocomplete="off" placeholder="验证码" name="verifycode" id="verifycode"/>
+                    <img class="btnSearch" id="loadcode" src="/user/getcode" onclick="loadImg()" />
+                </div>
+            </div>
             <div class="form-actions" style="text-align:center;padding-top:20px;">
                 <button id="loginBtn" type="submit" class="btn btn-warning" style="width:200px;">
                     登陆
@@ -154,7 +164,15 @@
 <script type="text/javascript" src="/static/script/bootstrap.js"></script>
 
 <script type="text/javascript">
+
+    function loadImg() {
+        document.getElementById("loadcode").src="/user/getcode";
+        //Math.random()为了防止有缓存
+    }
+
     jQuery(document).ready(function() {
+
+
         $("#registerBtn").on("click",function(){
             window.location.href="/static/register.html";
             return false;
@@ -163,7 +181,7 @@
         $("#loginBtn").on("click",function(){
             var telphone=$("#telphone").val();
             var password=$("#password").val();
-
+            var verifycode=$("#verifycode").val();
             $.ajax({
                 type:"POST",
                 contentType:"application/json;charset=utf-8",
@@ -171,10 +189,11 @@
                 data:JSON.stringify({
                     "mobilePhoneNumber":telphone,
                     "password":password,
-                    "code":"ZlGci"
+                    "code":verifycode,
                 }),
                 success:function(data){
                     if(data.code == 200){
+                        document.cookie=data.data.token;
                         window.location.href="/static/index.html";
                     }else{
                         alert("请求失败,原因为"+data.data.errMsg);

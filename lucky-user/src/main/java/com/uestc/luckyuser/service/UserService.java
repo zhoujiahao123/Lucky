@@ -7,6 +7,7 @@ import com.uestc.luckyuser.dto.request.UserParam;
 import com.uestc.luckyuser.dto.response.LoginResponse;
 import com.uestc.luckyuser.model.User;
 
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,7 +24,11 @@ public interface UserService {
 
     LoginResponse login(LoginParam loginParam) throws UnsupportedEncodingException, NoSuchAlgorithmException, BusinessException;
 
-    boolean verifyCode(String code,String mobilePhoneNumber);
+    boolean verifyCode(String code, HttpSession session);
 
     User findUserByMobilePhoneNumber(String mobilePhoneNumber);
+
+    User findUserByToken();
+
+    int countUser();
 }

@@ -169,23 +169,23 @@
             $.ajax({
                 type:"POST",
                 contentType:"application/json;charset=utf-8",
-                url:"/user/register",
+                url:"/user/logup",
                 data:JSON.stringify({
-                    "telphone":telphone,
+                    "mobilePhoneNumber":telphone,
                     "password":password,
-                    "nickName":nickName,
+                    "name":nickName,
                     "gender":gender
                 }),
                 success:function(data){
-                    if(data.status == "success"){
+                    if(data.code == 200){
                         alert("注册成功");
                         window.location.href="/static/login.html";
                     }else{
-                        alert("请求失败,原因为"+data.data.errMsg);
+                        alert("请求失败,原因为"+data.message);
                     }
                 },
                 error:function(data){
-                    alert("网络请求失败，原因为"+data.responseText);
+                    alert("网络请求失败，原因为"+data.message);
                 }
             });
             return false;
