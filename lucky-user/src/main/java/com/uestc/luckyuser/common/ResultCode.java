@@ -27,6 +27,8 @@ public enum ResultCode {
     VERIFY_CODE_CANNOT_BLANK(20009,"验证码不能为空"),
     VERIFY_CODE_ERROR(20010,"验证码错误"),
     USER_OR_PASSWORD_EMPTY(20011,"用户名或密码不能为空"),
+    CREATE_SELLER_FAIL(20012,"创建商家失败"),
+    SELLER_NOTFOUND(20013,"商家不存在"),
     ;
 
 

@@ -105,7 +105,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="seller:${data.list}">
+                                <tr th:each="seller:${data.records}">
                                     <td th:text="${seller.id}"></td>
                                     <td th:text="${seller.name}"></td>
                                     <td th:text="${seller.remarkScore}"></td>
@@ -185,8 +185,8 @@ License: You must have a valid license purchased only from themeforest(the above
         var baseUrl = "/admin/seller/index?page="
         setUrl(baseUrl);
         var totalSize = /*[[${data.total}]]*/;
-        var countPerPage = /*[[${data.pageSize}]]*/;
-        var currentPage = /*[[${data.pageNum}]]*/;
+        var countPerPage = /*[[${data.size}]]*/;
+        var currentPage = /*[[${data.current}]]*/;
         var allPage = /*[[${data.pages}]]*/;
         setPage(document.getElementById("page-container"),allPage,currentPage);
         if(allPage <= 1){
@@ -212,7 +212,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     "id": id,
                 },
                 success : function(data){
-                    if(data.status == 'success'){
+                    if(data.code == 200){
                         alert("启用商户成功");
                         window.location.href = "/admin/seller/index";
                     }else{
@@ -241,7 +241,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     "id": id,
                 },
                 success : function(data){
-                    if(data.status == 'success'){
+                    if(data.code == 200){
                         alert("禁用商户成功");
                         window.location.href = "/admin/seller/index";
                     }else{
