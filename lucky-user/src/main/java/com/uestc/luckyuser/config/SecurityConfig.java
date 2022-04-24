@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests();
         //配置白名单
         registry.antMatchers("/user/logup","/user/login","/user/getcode","/static/**",
-                "/admin/admin/**","/admin/seller/**")
+                "/admin/admin/**","/admin/seller/**","/admin/category/**","/category/**")
                 .permitAll();
         registry.and()
                 .authorizeRequests()

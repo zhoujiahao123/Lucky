@@ -29,6 +29,7 @@ public enum ResultCode {
     USER_OR_PASSWORD_EMPTY(20011,"用户名或密码不能为空"),
     CREATE_SELLER_FAIL(20012,"创建商家失败"),
     SELLER_NOTFOUND(20013,"商家不存在"),
+    CREATE_CATEGORY_FAIL(200014,"创建商品类型失败"),
     ;
 
 
