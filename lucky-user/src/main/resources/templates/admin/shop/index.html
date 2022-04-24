@@ -111,18 +111,19 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="shop:${data.list}">
+                                <tr th:each="shop:${data.records}">
                                     <td th:text="${shop.id}"></td>
                                     <td><img style="width:40px;height:40px;" th:src="${shop.iconUrl}"/></td>
                                     <td th:text="${shop.name}"></td>
                                     <td th:text="${shop.remarkScore}"</td>
                                     <td th:text="${shop.pricePerMan}"</td>
-                                    <td th:text="${shop.categoryModel.name}"></td>
+                                    <td th:text="${shop.category.name}"></td>
                                     <td th:text="${shop.tags}"></td>
                                     <td th:text="${shop.startTime}"></td>
                                     <td th:text="${shop.endTime}"></td>
                                     <td th:text="${shop.address}"></td>
-                                    <td th:text="${shop.sellerModel.name}"></td>
+                                    <td th:text="${shop.seller.name}"></td>
+
                                 </tr>
                                 </tbody>
                             </table>
@@ -216,9 +217,9 @@ License: You must have a valid license purchased only from themeforest(the above
         var baseUrl = "/admin/shop/index?page="
         setUrl(baseUrl);
         var totalSize = /*[[${data.total}]]*/;
-        var countPerPage = /*[[${data.pageSize}]]*/;
+        var countPerPage = /*[[${data.size}]]*/;
         var allPage = /*[[${data.pages}]]*/;
-        setPage(document.getElementById("page-container"),allPage,/*[[${currentPage}]]*/);
+        setPage(document.getElementById("page-container"),allPage,/*[[${data.current}]]*/);
         if(allPage <= 1){
             $("#page-container").hide();
         }

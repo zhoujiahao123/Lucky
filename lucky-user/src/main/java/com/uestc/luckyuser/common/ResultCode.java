@@ -30,6 +30,10 @@ public enum ResultCode {
     CREATE_SELLER_FAIL(20012,"创建商家失败"),
     SELLER_NOTFOUND(20013,"商家不存在"),
     CREATE_CATEGORY_FAIL(200014,"创建商品类型失败"),
+    CREATE_SHOP_FAIL(200015,"创建门店失败"),
+    SELLER_ALREADY_DISABLE(200016,"商家已被禁用"),
+    CATEGORY_NOTFOUND(200017,"类别不存在"),
+    LONGITUDE_OR_LATITUDE_CANNOT_EMPTY(200018,"经纬度不能为空"),
     ;
 
 

@@ -17,4 +17,6 @@ public interface SellerService {
     boolean createSellers(Seller seller);
 
     boolean changeSellerStatus(int id,int disabledFlag) throws BusinessException;
+
+    Seller selectById(long sellerId);
 }

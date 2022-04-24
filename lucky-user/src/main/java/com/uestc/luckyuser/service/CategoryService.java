@@ -15,5 +15,7 @@ public interface CategoryService {
     List<Category> selectAll();
 
     boolean isCreate(Category category);
+
+    Category selectCategoryById(long id);
 }
 

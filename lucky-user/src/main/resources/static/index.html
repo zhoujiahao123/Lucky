@@ -311,7 +311,7 @@
                     type : "GET",
                     url : "/shop/recommend?longitude="+longitude+"&latitude="+latitude,
                     success : function(data){
-                        if(data.status == 'success'){
+                        if(data.code == 200){
                             var dataList = data.data;
                             for(var i = 0; i < dataList.length; i++){
                                 var distance = dataList[i].distance;
@@ -354,7 +354,7 @@
         $.ajax({
             type:"POST",
             headers:{
-              "Authorization":document.cookie
+              "Authorization":document.cookie.split(";")[0]
             },
             url:"/user/info",
             success:function(data){

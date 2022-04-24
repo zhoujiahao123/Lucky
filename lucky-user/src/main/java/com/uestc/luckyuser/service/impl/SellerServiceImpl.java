@@ -51,4 +51,10 @@ public class SellerServiceImpl implements SellerService {
         }
         return false;
     }
+
+    @Override
+    public Seller selectById(long sellerId) {
+        Seller seller = sellerMapper.selectById(sellerId);
+        return seller;
+    }
 }
