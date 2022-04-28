@@ -28,7 +28,10 @@ public class CommonResult<T> {
     }
 
     public static <T> CommonResult fail(ResultCode code) {
-        return new CommonResult<T>(code.getCode(),null,code.getMessage());
+        return new CommonResult<T>(code.getCode(), null, code.getMessage());
     }
 
+    public static <T> CommonResult fail(ResultCode code, String appendMessage) {
+        return new CommonResult<T>(code.getCode(), null, code.getMessage() + " " + appendMessage);
+    }
 }

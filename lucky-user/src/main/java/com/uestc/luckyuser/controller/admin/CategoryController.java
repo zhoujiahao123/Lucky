@@ -3,6 +3,7 @@ package com.uestc.luckyuser.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.uestc.luckyuser.common.BusinessException;
+import com.uestc.luckyuser.common.CommonResult;
 import com.uestc.luckyuser.common.ResultCode;
 import com.uestc.luckyuser.common.Utils;
 import com.uestc.luckyuser.dto.request.CategoryCreateReq;
@@ -54,7 +55,8 @@ public class CategoryController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid CategoryCreateReq categoryCreateReq, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            Utils.getErrorMessage(bindingResult);
+            String errorMessage = Utils.getErrorMessage(bindingResult);
+            CommonResult.fail(ResultCode.PARAMETER_VALIDATION_ERROR, errorMessage);
         }
         Category categoryModel = new Category();
         categoryModel.setName(categoryCreateReq.getName());

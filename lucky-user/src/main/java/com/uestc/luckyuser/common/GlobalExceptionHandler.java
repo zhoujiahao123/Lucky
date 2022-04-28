@@ -18,7 +18,11 @@ public class GlobalExceptionHandler {
         //该异常用于处理
         if (ex instanceof BusinessException) {
             BusinessException e = (BusinessException) ex;
-            return CommonResult.fail(e.getResultCode());
+            String appendMessage = e.getAppendMessage();
+            if (appendMessage.equals("")) {
+                return CommonResult.fail(e.getResultCode());
+            }
+            return CommonResult.fail(e.getResultCode(), appendMessage);
         } else if (ex instanceof DuplicateKeyException) {
             return CommonResult.fail(ResultCode.MOBILE_PHONE_NUMBER_EXIST);
         } else {

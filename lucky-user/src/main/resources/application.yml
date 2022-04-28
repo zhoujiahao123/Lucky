@@ -47,9 +47,6 @@ spring:
         max-idle: 8
         min-idle: 2
 
-  mvc:
-    static-path-pattern: /static/**
-
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -66,3 +63,5 @@ jwt:
 admin:
   email: admin
   password: 4QrcOUm6Wau+VuBX8g+IPg==
+elasticsearch:
+  ip: 127.0.0.1:9200

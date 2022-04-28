@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.uestc.luckyuser.bo.ShopBo;
 import com.uestc.luckyuser.bo.ShopPage;
 import com.uestc.luckyuser.common.BusinessException;
+import com.uestc.luckyuser.common.CommonResult;
 import com.uestc.luckyuser.common.ResultCode;
 import com.uestc.luckyuser.common.Utils;
 import com.uestc.luckyuser.dto.request.ShopCreateReq;
@@ -55,7 +56,8 @@ public class ShopController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid ShopCreateReq shopCreateReq, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            Utils.getErrorMessage(bindingResult);
+            String errorMessage = Utils.getErrorMessage(bindingResult);
+            CommonResult.fail(ResultCode.PARAMETER_VALIDATION_ERROR, errorMessage);
         }
         Shop shop = new Shop();
         BeanUtils.copyProperties(shopCreateReq, shop);

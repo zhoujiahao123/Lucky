@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -51,13 +52,15 @@ public class ShopController {
                                                     @RequestParam(name = "keyword") String keyword,
                                                     @RequestParam(name = "orderby", required = false) Integer orderby,
                                                     @RequestParam(name = "categoryId", required = false) Integer categoryId,
-                                                    @RequestParam(name = "tags", required = false) String tags) throws BusinessException {
+                                                    @RequestParam(name = "tags", required = false) String tags) throws BusinessException, IOException {
         if (StringUtils.isEmpty(keyword) || longitude == null || latitude == null) {
             throw new BusinessException(ResultCode.PARAMETER_VALIDATION_ERROR);
         }
-        List<ShopBo> shopModelList = shopService.search(longitude,latitude,keyword,orderby,categoryId,tags);
+        Map<String,Object> result = shopService.searchEs(longitude,latitude,keyword,orderby,categoryId,tags);
+        List<ShopBo> shopModelList = (List<ShopBo>) result.get("shop");
         List<Category> categoryModelList = categoryService.selectAll();
-        List<Map<String,Object>> tagsAggregation = shopService.searchGroupByTags(keyword,categoryId,tags);
+        //List<Map<String,Object>> tagsAggregation = shopService.searchGroupByTags(keyword,categoryId,tags);
+        List<Map<String,Object>>  tagsAggregation = (List<Map<String, Object>>) result.get("tags");
         Map<String,Object> resMap = new HashMap<>();
         resMap.put("shop",shopModelList);
         resMap.put("category",categoryModelList);

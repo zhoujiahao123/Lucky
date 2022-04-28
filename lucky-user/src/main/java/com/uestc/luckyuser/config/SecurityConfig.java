@@ -34,13 +34,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     MyCustomUserService myCustomUserService;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
                 .authorizeRequests();
         //配置白名单
+
         registry.antMatchers("/user/logup","/user/login","/user/getcode","/static/**",
-                "/admin/admin/**","/admin/seller/**","/admin/category/**","/category/**","/admin/shop/**","/shop/**")
+                "/admin/admin/**","/admin/seller/**","/admin/category/**","/category/**","/admin/shop/**","/shop/**"
+        ,"/swagger-ui.html","/webjars/**","/swagger-resources/**","/v2/api-docs")
                 .permitAll();
         registry.and()
                 .authorizeRequests()

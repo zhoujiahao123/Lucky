@@ -60,7 +60,8 @@ public class SellerController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid SellerParam sellerParam, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            Utils.getErrorMessage(bindingResult);
+            String errorMessage = Utils.getErrorMessage(bindingResult);
+            CommonResult.fail(ResultCode.PARAMETER_VALIDATION_ERROR, errorMessage);
         }
         Seller seller = new Seller();
         seller.setName(sellerParam.getName());

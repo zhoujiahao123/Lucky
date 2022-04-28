@@ -67,7 +67,6 @@ public class UserController {
     @ApiOperation("根据id获取用户")
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAnyRole('ROLE_NORMAL')")
     public CommonResult<User> getUser(@PathVariable(name = "id") Long id) throws BusinessException {
         User user = userService.getUserById(id);
         if (user == null) {
@@ -83,7 +82,8 @@ public class UserController {
     @ResponseBody
     public CommonResult<User> logUp(@RequestBody @Validated UserParam userParam, BindingResult bindingResult) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         if (bindingResult.hasErrors()) {
-            Utils.getErrorMessage(bindingResult);
+            String errorMessage = Utils.getErrorMessage(bindingResult);
+            CommonResult.fail(ResultCode.PARAMETER_VALIDATION_ERROR, errorMessage);
         }
         User user = userService.insertUser(userParam);
         return CommonResult.success(user);
@@ -93,9 +93,10 @@ public class UserController {
     @RequestMapping("/login")
     @ResponseBody
     public CommonResult<LoginResponse> login(@Validated @RequestBody LoginParam loginParam,
-                                             BindingResult bindingResult,HttpServletRequest request) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+                                             BindingResult bindingResult, HttpServletRequest request) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         if (bindingResult.hasErrors()) {
-            Utils.getErrorMessage(bindingResult);
+            String errorMessage = Utils.getErrorMessage(bindingResult);
+            CommonResult.fail(ResultCode.PARAMETER_VALIDATION_ERROR, errorMessage);
         }
 
         //首先验证验证码是否正确
@@ -129,7 +130,7 @@ public class UserController {
      */
     @ApiOperation("获取验证码操作")
     @RequestMapping("/getcode")
-    public void getCode(HttpServletResponse response,HttpServletRequest request) throws IOException {
+    public void getCode(HttpServletResponse response, HttpServletRequest request) throws IOException {
         String sessionId = request.getSession().getId();
         Object[] objs = VerifyUtil.newBuilder()
                 .setWidth(120)   //设置图片的宽度
@@ -148,7 +149,7 @@ public class UserController {
         //放入redis中，实现验证功能
         redisService.set(UserPrefix.VerifyTimes, sessionId, 5);
         //将验证码放入session中
-        request.getSession().setAttribute(VERIFY_CODE_SESSION,verifyCode);
+        request.getSession().setAttribute(VERIFY_CODE_SESSION, verifyCode);
 
         //返回图片给前端
         response.setContentType("image/png");

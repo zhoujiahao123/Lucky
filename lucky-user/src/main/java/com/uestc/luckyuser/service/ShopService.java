@@ -6,6 +6,7 @@ import com.uestc.luckyuser.bo.ShopPage;
 import com.uestc.luckyuser.common.BusinessException;
 import com.uestc.luckyuser.model.Shop;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,9 @@ public interface ShopService {
     List<ShopBo> search(BigDecimal longitude,
                         BigDecimal latitude, String keyword,Integer orderby,
                         Integer categoryId,String tags);
+
+    Map<String,Object> searchEs(BigDecimal longitude,BigDecimal latitude,
+                                String keyword,Integer orderby,Integer categoryId,String tags) throws IOException;
 
     List<Map<String,Object>> searchGroupByTags(String keyword,
                                                Integer categoryId,String tags);

@@ -11,4 +11,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class BusinessException extends Exception {
     private ResultCode resultCode;
+    private String AppendMessage;
+
+    public BusinessException(ResultCode resultCode) {
+        this.resultCode = resultCode;
+    }
 }

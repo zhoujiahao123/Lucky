@@ -10,19 +10,13 @@ import org.springframework.validation.FieldError;
  */
 public class Utils {
 
-    public static void getErrorMessage(BindingResult bindingResult) throws BusinessException {
+    public static String getErrorMessage(BindingResult bindingResult) throws BusinessException {
+        StringBuilder sb = new StringBuilder();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            if (fieldError.getDefaultMessage().equals("昵称不能为空")) {
-                throw new BusinessException(ResultCode.NAME_CANNOT_BLANK);
-            } else if (fieldError.getDefaultMessage().equals("密码不能为空")) {
-                throw new BusinessException(ResultCode.PASSWORD_CANNOT_BLANK);
-            } else if (fieldError.getDefaultMessage().equals("性别不能为空")) {
-                throw new BusinessException(ResultCode.GENDER_CANNOT_BLANK);
-            } else if (fieldError.getDefaultMessage().equals("手机号码不能为空")) {
-                throw new BusinessException(ResultCode.PHONE_CANNOT_BLANK);
-            } else if (fieldError.getDefaultMessage().equals("验证码不能为空")) {
-                throw new BusinessException(ResultCode.VERIFY_CODE_CANNOT_BLANK);
-            }
+            sb.append(fieldError.getDefaultMessage());
+            sb.append(",");
         }
+        String res = sb.substring(0, sb.length() - 1);
+        return res;
     }
 }
